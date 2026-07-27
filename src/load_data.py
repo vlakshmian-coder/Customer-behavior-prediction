@@ -6,4 +6,8 @@ def load_data():
     file_path = project_root / "data" / "processed" / "online_retail_cleaned.csv"
 
     df = pd.read_csv(file_path)
+
+    # Convert InvoiceDate to datetime
+    df["InvoiceDate"] = pd.to_datetime(df["InvoiceDate"])
+
     return df
