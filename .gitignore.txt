@@ -1,2 +1,0 @@
-data/raw/online_retail_II.csv
-data/raw/online_retail_II.xlsx
