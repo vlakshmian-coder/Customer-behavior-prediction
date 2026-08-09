@@ -1,5 +1,9 @@
 import streamlit as st
 import pandas as pd
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+REPORTS_DIR = PROJECT_ROOT / "reports"
 
 st.set_page_config(
     page_title="Vantara - Customer Intelligence",
@@ -64,15 +68,62 @@ model_df = pd.read_csv(
     "data/processed/model_comparison.csv"
 )
 
-# Model performance chart
-performance_chart = model_df.set_index("Model")[
-    ["Accuracy", "Precision", "Recall", "F1 Score", "ROC-AUC"]
-]
+# Display the polished model comparison charts already generated
+# and saved in the reports folder.
 
-st.bar_chart(performance_chart)
+col1, col2 = st.columns(2)
+
+with col1:
+    st.image(
+        "reports/model_performance_comparison_all_metrics.png",
+        caption="Model Performance Comparison — All Metrics",
+        use_container_width=True
+    )
+
+with col2:
+    st.image(
+        "reports/model_comparison_roc_auc.png",
+        caption="Model Comparison — ROC-AUC",
+        use_container_width=True
+    )
 
 # Detailed performance table
 st.dataframe(
     model_df,
     width="stretch"
 )
+
+st.divider()
+
+# ==========================================================
+# SHAP MODEL EXPLAINABILITY
+# ==========================================================
+
+st.subheader("🔍 Model Explainability — SHAP")
+
+st.markdown(
+    "SHAP (SHapley Additive exPlanations) helps explain "
+    "which features contribute to the model's churn predictions."
+)
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.image(
+        REPORTS_DIR / "shap_feature_importance_bar.png",
+        caption="SHAP Feature Importance",
+        use_container_width=True
+    )
+
+with col2:
+    st.image(
+        REPORTS_DIR / "shap_feature_importance.png",
+        caption="SHAP Feature Importance — Detailed",
+        use_container_width=True
+    )
+
+st.image(
+     REPORTS_DIR / "shap_summary_beeswarm.png",
+     caption="SHAP Beeswarm Summary",
+     use_container_width=True
+    )
